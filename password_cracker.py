@@ -3,8 +3,7 @@ from hmac import compare_digest
 
 
 def passwd_hash(passwd):
-  fpasswd = passwd.encode('utf-8')
-  sha1 = hashlib.sha1(fpasswd)
+  sha1 = hashlib.sha1(bytes(passwd, 'utf-8'))
   return sha1.hexdigest()
 
 
@@ -25,10 +24,8 @@ def crack_sha1_hash(hash, use_salts=False):
 
             if hash == salt1 or hash == salt2 or hash == salt3:
               return passwd
-            else:
-              result = "PASSWORD NOT IN DATABASE"
 
-      return result
+      return "PASSWORD NOT IN DATABASE"
 
   else:
     with open('./top-10000-passwords.txt', 'r') as top_10000_password:
@@ -36,7 +33,5 @@ def crack_sha1_hash(hash, use_salts=False):
       for passwd in passwords:
         if compare_digest(hash, passwd_hash(passwd)):
           return passwd
-        else:
-          result = "PASSWORD NOT IN DATABASE"
 
-      return result
+      return "PASSWORD NOT IN DATABASE"
